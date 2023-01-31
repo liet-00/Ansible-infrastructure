@@ -1,0 +1,21 @@
+go_arch: amd64
+
+  # prometheus vars
+prometheus_version: 2.37.5
+__prometheus_checksum: a5824b2395a440caed8fda287bab6f91203ee765e623418ce452370285a6ce18
+prometheus_db_dir: /var/lib/prometheus
+prometheus_config_dir: /etc/prometheus
+prometheus_config_file: prometheus_conf.yml
+prometheus_service_file: templates/prometheus.service.j2
+_prometheus_binary_install_dir: '/usr/local/bin'
+prometheus_skip_install: false
+prometheus_binary_local_dir: ''
+
+  # node_exporter vars
+node_exporter_version: 1.5.0
+node_exporter_checksum: af999fd31ab54ed3a34b9f0b10c28e9acee9ef5ac5a5d5edfdde85437db7acbb
+_node_exporter_binary_install_dir: "/usr/local/bin"
+node_exporter_binary_local_dir: ''
+node_exporter_service_file: templates/node_exporter.service.j2
+
+

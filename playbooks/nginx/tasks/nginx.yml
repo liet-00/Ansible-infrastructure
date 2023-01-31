@@ -1,0 +1,40 @@
+# Nginx installation
+- name: add nginx repo
+  file:
+    path: /etc/apt/sources.list.d/nginx.list
+    state: touch
+
+- name: edit repo file
+  lineinfile:
+    path: /etc/apt/sources.list.d/nginx.list
+    state: present
+    line: "{{ item }}"
+  with_items:
+  - 'deb https://nginx.org/packages/debian/ bullseye nginx'
+  - 'deb-src https://nginx.org/packages/debian/ bullseye nginx' 
+
+- name: apt_update
+  shell:
+    cmd: sudo apt update
+  ignore_errors: yes
+
+- name: install gnupg
+  apt:
+    pkg: gnupg
+    state: present
+
+- name: fix key error
+  shell:
+    cmd: sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ABF5BD827BD9BF62 && sudo apt update
+    
+- name: Install nginx 
+  apt:
+    pkg: nginx
+    state: present
+
+- name: Enable and start nginx
+  service:
+    name: nginx
+    enabled: yes
+    state: started
+

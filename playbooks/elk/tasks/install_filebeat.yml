@@ -1,0 +1,41 @@
+# LOGSTASH INSTALL 
+- name: Install logstash 
+  package: 
+    name: "{{ beat_package }}" 
+    state: present 
+ 
+- name: Copy modules configuration. 
+  copy: 
+    src: "configs/{{  beat_package }}/{{ filebeat_module }}.yml" 
+    dest: "/etc/{{ beat_package }}/modules.d/{{ filebeat_module }}.yml" 
+    owner: root 
+    group: root 
+    mode: 0644 
+ 
+- name: Copy filebeat config 
+  copy: 
+    src: "configs/{{ beat_package }}/{{ filebeat_conf }}" 
+    dest: "/etc/{{ beat_package }}/{{ beat_package }}.yml" 
+    owner: root 
+    group: root 
+    mode: 0644 
+  notify: restart filebeat
+
+- name: enable module
+  shell:
+    cmd: filebeat modules enable "{{ filebeat_module }}"
+
+- name: setup index management with elasticsearch
+  shell:
+    cmd: filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.60.5:9200"]'
+
+- name: setup dashboard
+  shell:
+    cmd: filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['192.168.60.5:9200'] -E setup.kibana.host=192.168.60.5:5601
+ 
+- name: start and enable service 
+  service: 
+    name: filebeat
+    state: started 
+    enabled: yes 
+

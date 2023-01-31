@@ -1,0 +1,11 @@
+[Unit]
+Description=Daemontools service
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/command/svscanboot
+
+[Install]
+WantedBy=multi-user.target

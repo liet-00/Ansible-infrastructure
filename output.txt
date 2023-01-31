@@ -1,0 +1,307 @@
+
+PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [192.168.60.4]
+ok: [192.168.60.2]
+ok: [192.168.60.3]
+
+TASK [cp hosts file to boxes] **************************************************
+ok: [192.168.60.4]
+ok: [192.168.60.2]
+ok: [192.168.60.3]
+
+PLAY [Nginx webserver] *********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [192.168.60.2]
+
+TASK [add nginx repo] **********************************************************
+changed: [192.168.60.2]
+
+TASK [edit repo file] **********************************************************
+ok: [192.168.60.2] => (item=deb https://nginx.org/packages/debian/ bullseye nginx)
+ok: [192.168.60.2] => (item=deb-src https://nginx.org/packages/debian/ bullseye nginx)
+
+TASK [apt_update] **************************************************************
+changed: [192.168.60.2]
+
+TASK [install gnupg] ***********************************************************
+ok: [192.168.60.2]
+
+TASK [fix key error] ***********************************************************
+changed: [192.168.60.2]
+
+TASK [Install nginx] ***********************************************************
+ok: [192.168.60.2]
+
+TASK [Enable and start nginx] **************************************************
+ok: [192.168.60.2]
+
+TASK [Install ufw] *************************************************************
+ok: [192.168.60.2]
+
+TASK [ufw rule ssh] ************************************************************
+ok: [192.168.60.2]
+
+TASK [ufw rule] ****************************************************************
+ok: [192.168.60.2]
+
+TASK [rootdir or cachedir for nginx] *******************************************
+ok: [192.168.60.2]
+
+TASK [rm default site] *********************************************************
+ok: [192.168.60.2]
+
+TASK [copy config file] ********************************************************
+ok: [192.168.60.2]
+
+TASK [restart_nginx] ***********************************************************
+changed: [192.168.60.2]
+
+TASK [Create the node_exporter group] ******************************************
+ok: [192.168.60.2]
+
+TASK [Create the node_exporter user] *******************************************
+ok: [192.168.60.2]
+
+TASK [Download node_exporter binary to local folder] ***************************
+ok: [192.168.60.2 -> localhost]
+
+TASK [Unpack node_exporter binary] *********************************************
+skipping: [192.168.60.2]
+
+TASK [Propagate node_exporter binaries] ****************************************
+ok: [192.168.60.2]
+
+TASK [propagate locally distributed node_exporter binary] **********************
+skipping: [192.168.60.2]
+
+TASK [create systemd service unit] *********************************************
+ok: [192.168.60.2]
+
+TASK [enable node_exporter.service] ********************************************
+ok: [192.168.60.2]
+
+TASK [open node port for prometheus server] ************************************
+ok: [192.168.60.2] => (item="192.168.60.4")
+ok: [192.168.60.2] => (item="192.168.60.2")
+
+TASK [Create the nginx_exporter group] *****************************************
+ok: [192.168.60.2]
+
+TASK [Create the nginx_exporter user] ******************************************
+ok: [192.168.60.2]
+
+TASK [Download nginx_exporter binary to local folder] **************************
+ok: [192.168.60.2 -> localhost]
+
+TASK [Unpack nginx_exporter binary] ********************************************
+ok: [192.168.60.2 -> localhost]
+
+TASK [Propagate nginx_exporter binaries] ***************************************
+ok: [192.168.60.2]
+
+TASK [propagate locally distributed nginx_exporter binary] *********************
+skipping: [192.168.60.2]
+
+TASK [create systemd service unit] *********************************************
+ok: [192.168.60.2]
+
+TASK [enable nginx_exporter.service] *******************************************
+ok: [192.168.60.2]
+
+TASK [open node port for prometheus server] ************************************
+ok: [192.168.60.2] => (item="192.168.60.4")
+ok: [192.168.60.2] => (item="192.168.60.2")
+
+PLAY [Nginx proxy] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [192.168.60.3]
+
+TASK [add nginx repo] **********************************************************
+changed: [192.168.60.3]
+
+TASK [edit repo file] **********************************************************
+ok: [192.168.60.3] => (item=deb https://nginx.org/packages/debian/ bullseye nginx)
+ok: [192.168.60.3] => (item=deb-src https://nginx.org/packages/debian/ bullseye nginx)
+
+TASK [apt_update] **************************************************************
+changed: [192.168.60.3]
+
+TASK [install gnupg] ***********************************************************
+ok: [192.168.60.3]
+
+TASK [fix key error] ***********************************************************
+changed: [192.168.60.3]
+
+TASK [Install nginx] ***********************************************************
+ok: [192.168.60.3]
+
+TASK [Enable and start nginx] **************************************************
+ok: [192.168.60.3]
+
+TASK [Install ufw] *************************************************************
+ok: [192.168.60.3]
+
+TASK [ufw rule ssh] ************************************************************
+ok: [192.168.60.3]
+
+TASK [ufw rule] ****************************************************************
+ok: [192.168.60.3]
+
+TASK [install python cryptography lib] *****************************************
+ok: [192.168.60.3]
+
+TASK [Create private key] ******************************************************
+ok: [192.168.60.3]
+
+TASK [Create self-signed certificate without CSR info] *************************
+ok: [192.168.60.3]
+
+TASK [rootdir or cachedir for nginx] *******************************************
+changed: [192.168.60.3]
+
+TASK [rm default site] *********************************************************
+ok: [192.168.60.3]
+
+TASK [copy config file] ********************************************************
+ok: [192.168.60.3]
+
+TASK [restart_nginx] ***********************************************************
+changed: [192.168.60.3]
+
+TASK [Create the node_exporter group] ******************************************
+ok: [192.168.60.3]
+
+TASK [Create the node_exporter user] *******************************************
+ok: [192.168.60.3]
+
+TASK [Download node_exporter binary to local folder] ***************************
+ok: [192.168.60.3 -> localhost]
+
+TASK [Unpack node_exporter binary] *********************************************
+skipping: [192.168.60.3]
+
+TASK [Propagate node_exporter binaries] ****************************************
+ok: [192.168.60.3]
+
+TASK [propagate locally distributed node_exporter binary] **********************
+skipping: [192.168.60.3]
+
+TASK [create systemd service unit] *********************************************
+changed: [192.168.60.3]
+
+TASK [enable node_exporter.service] ********************************************
+changed: [192.168.60.3]
+
+TASK [open node port for prometheus server] ************************************
+changed: [192.168.60.3] => (item="192.168.60.4")
+changed: [192.168.60.3] => (item="192.168.60.3")
+
+TASK [Create the nginx_exporter group] *****************************************
+changed: [192.168.60.3]
+
+TASK [Create the nginx_exporter user] ******************************************
+changed: [192.168.60.3]
+
+TASK [Download nginx_exporter binary to local folder] **************************
+ok: [192.168.60.3 -> localhost]
+
+TASK [Unpack nginx_exporter binary] ********************************************
+ok: [192.168.60.3 -> localhost]
+
+TASK [Propagate nginx_exporter binaries] ***************************************
+changed: [192.168.60.3]
+
+TASK [propagate locally distributed nginx_exporter binary] *********************
+skipping: [192.168.60.3]
+
+TASK [create systemd service unit] *********************************************
+changed: [192.168.60.3]
+
+TASK [enable nginx_exporter.service] *******************************************
+changed: [192.168.60.3]
+
+TASK [open node port for prometheus server] ************************************
+changed: [192.168.60.3] => (item="192.168.60.4")
+changed: [192.168.60.3] => (item="192.168.60.3")
+
+RUNNING HANDLER [restart node_exporter] ****************************************
+changed: [192.168.60.3]
+
+RUNNING HANDLER [restart nginx_exporter] ***************************************
+changed: [192.168.60.3]
+
+PLAY [Setup prometheus server] *************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [192.168.60.4]
+
+TASK [create prometheus system group] ******************************************
+ok: [192.168.60.4]
+
+TASK [create prometheus system user] *******************************************
+ok: [192.168.60.4]
+
+TASK [create prometheus data directory] ****************************************
+ok: [192.168.60.4]
+
+TASK [create prometheus configuration directories] *****************************
+ok: [192.168.60.4] => (item=/etc/prometheus)
+ok: [192.168.60.4] => (item=/etc/prometheus/rules)
+ok: [192.168.60.4] => (item=/etc/prometheus/file_sd)
+
+TASK [download prometheus binary to local folder] ******************************
+ok: [192.168.60.4 -> localhost]
+
+TASK [unpack prometheus binaries] **********************************************
+skipping: [192.168.60.4]
+
+TASK [propagate official prometheus and promtool binaries] *********************
+ok: [192.168.60.4] => (item=prometheus)
+ok: [192.168.60.4] => (item=promtool)
+
+TASK [propagate official console templates] ************************************
+ok: [192.168.60.4] => (item=console_libraries)
+ok: [192.168.60.4] => (item=consoles)
+
+TASK [copy prometheus config file to node] *************************************
+ok: [192.168.60.4]
+
+TASK [create systemd service unit] *********************************************
+ok: [192.168.60.4]
+
+TASK [enable prometheus.service] ***********************************************
+ok: [192.168.60.4]
+
+TASK [Create the node_exporter group] ******************************************
+ok: [192.168.60.4]
+
+TASK [Create the node_exporter user] *******************************************
+ok: [192.168.60.4]
+
+TASK [Download node_exporter binary to local folder] ***************************
+ok: [192.168.60.4 -> localhost]
+
+TASK [Unpack node_exporter binary] *********************************************
+skipping: [192.168.60.4]
+
+TASK [Propagate node_exporter binaries] ****************************************
+ok: [192.168.60.4]
+
+TASK [propagate locally distributed node_exporter binary] **********************
+skipping: [192.168.60.4]
+
+TASK [create systemd service unit] *********************************************
+ok: [192.168.60.4]
+
+TASK [enable node_exporter.service] ********************************************
+ok: [192.168.60.4]
+
+PLAY RECAP *********************************************************************
+192.168.60.2               : ok=32   changed=4    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+192.168.60.3               : ok=37   changed=16   unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+192.168.60.4               : ok=19   changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
+

@@ -1,0 +1,79 @@
+---
+- name: Create the elasticsearch_exporter group
+  group:
+    name: elasticsearch_exporter
+    state: present
+    system: true
+
+- name: Create the elasticsearch_exporter user
+  user:
+    name: elasticsearch_exporter
+    groups: elasticsearch_exporter
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: false
+    home: /
+
+- block:
+    - name: Download elasticsearch_exporter binary to local folder
+      become: false
+      get_url:
+        url: "https://github.com/prometheus-community/elasticsearch_exporter/releases/download/v{{ elasticsearch_version }}/elasticsearch_exporter-{{ node_exporter_version }}.linux-{{ go_arch }}.tar.gz"
+        dest: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}.tar.gz"
+        checksum: "sha256:{{ elasticsearch_exporter_checksum }}"
+        mode: '0644'
+      register: _download_binary
+      until: _download_binary is succeeded
+      retries: 5
+      delay: 2
+      delegate_to: localhost
+      check_mode: false
+
+    - name: Unpack elasticsearch_exporter binary
+      become: false
+      unarchive:
+        src: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}.tar.gz"
+        dest: "/tmp"
+        creates: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}/elasticsearch_exporter"
+      delegate_to: localhost
+      check_mode: false
+
+    - name: Propagate elasticsearch_exporter binaries
+      copy:
+        src: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}/node_exporter"
+        dest: "{{ _elasticsearch_exporter_binary_install_dir }}/elasticsearch_version"
+        mode: 0755
+        owner: root
+        group: root
+      notify: restart elasticsearch_exporter
+      when: not ansible_check_mode
+  when: elasticsearch_exporter_binary_local_dir | length == 0
+
+- name: propagate locally distributed elasticsearch_exporter binary
+  copy:
+    src: "{{ elasticsearch_exporter_binary_local_dir }}/elasticsearch_version"
+    dest: "{{ _elasticsearch_exporter_binary_install_dir }}/elasticsearch_version"
+    mode: 0755
+    owner: root
+    group: root
+  when: elasticsearch_exporter_binary_local_dir | length > 0
+  notify: restart elasticsearch_exporter
+
+
+- name: create systemd service unit
+  template:
+    src: "{{ elasticsearch_exporter_service_file }}"
+    dest: /etc/systemd/system/elasticsearch_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart elasticsearch_exporter
+
+- name: enable elasticsearch_exporter.service
+  service:
+    name: elasticsearch_exporter.service
+    enabled: yes
+
+

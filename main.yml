@@ -1,0 +1,15 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: cp hosts file to boxes
+    copy:
+      src: hosts
+      dest: /etc/hosts
+      owner: root
+      group: root
+      mode: 0644
+
+- import_playbook: playbooks/nginx/nginx.yml
+- import_playbook: playbooks/nginx/nginxP.yml
+- import_playbook: playbooks/prometheus/prometheus.yml

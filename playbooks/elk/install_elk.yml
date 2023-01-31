@@ -1,0 +1,46 @@
+---
+- hosts: elk
+  vars_files: vars.yml
+  become: true
+
+  tasks:
+    - name: install java
+      apt:
+        name: "{{ java_packages }}"
+        state: present
+        update_cache: yes
+    - name: required dependencies
+      apt:
+        name: 
+          - apt-transport-https
+          - gnupg2
+        state: present
+
+    - name: install elasticsearch
+      import_tasks: tasks/install_elasticsearch.yml
+    - name: install kibana
+      import_tasks: tasks/install_kibana.yml
+    - name: install logstash
+      import_tasks: tasks/install_logstash.yml
+    - name: install filebeat
+      import_tasks: tasks/install_filebeat.yml
+
+  handlers:
+    - name: restart elasticsearch
+      service:
+        name: elasticsearch
+        state: restarted
+    - name: restart kibana
+      service:
+        name: kibana
+        state: restarted
+    - name: restart logstash
+      service:
+        name: logstash
+        state: restarted
+    - name: restart filebeat
+      service:
+        name: filebeat
+        state: restarted
+      
+

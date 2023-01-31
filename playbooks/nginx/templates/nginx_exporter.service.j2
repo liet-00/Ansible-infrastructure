@@ -1,0 +1,15 @@
+[Unit]
+Description=Nginx Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=nginx_exporter
+Group=nginx_exporter
+Type=simple
+ExecStart={{ _nginx_exporter_binary_install_dir }}/nginx-prometheus-exporter \
+	-nginx.scrape-uri=http://192.168.60.2:80/metrics \
+	-web.telemetry-path=/metrics
+
+[Install]
+WantedBy=multi-user.target

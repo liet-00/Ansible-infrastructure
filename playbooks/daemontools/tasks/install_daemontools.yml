@@ -1,0 +1,85 @@
+---
+
+- name: install dependencies
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items: 
+    - "make"
+    - "gcc"
+
+- name: Create package directories
+  file:
+    path: /usr/local/package
+    owner: root
+    group: root
+    mode: 1755
+    state: directory
+
+- name: symlink to package directory
+  file:
+    src: /usr/local/package
+    dest: /package
+    owner: root
+    group: root
+    state: link
+
+- name: Directory for service management
+  file:
+    path: "/var/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  with_items:
+    - "svc.d"
+    - "multilog"
+    - "tcprules"
+
+- block:
+  - name: Download daemontools binary 
+    become: false
+    get_url:
+      url: "http://cr.yp.to/daemontools/daemontools-0.76.tar.gz"
+      dest: "/tmp/daemontools-076.tar.gz"
+      mode: '0644'
+    delegate_to: localhost
+
+  - name: Unpack daemontools binary
+    become: false
+    unarchive:
+      src: "/tmp/daemontools-076.tar.gz"
+      dest: "/tmp"
+    delegate_to: localhost
+      
+  - name: Copy daemontools binary to host
+    copy:
+      src: "/tmp/admin/daemontools-0.76"
+      dest: "/package"
+      mode: 0755
+      owner: root
+      group: root
+
+- name: Fix errno.h bug during installation
+  copy:
+    src: "configs/{{ errno_conf }}"
+    dest: "/package/daemontools-0.76/src/conf-cc"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install daemontools
+  command: package/install
+  become: yes
+  args:
+    chdir: /package/daemontools-0.76
+
+- name: setup service unit file
+  copy:
+    src: "configs/{{ unit_file }}"
+    dest: "/etc/systemd/system/daemontools.service"
+    owner: root
+    group: root
+    mode: 0644
+
+

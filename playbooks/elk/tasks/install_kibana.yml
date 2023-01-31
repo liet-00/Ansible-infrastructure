@@ -1,0 +1,21 @@
+# KIRBANA INSTALL
+- name: Install kibana
+  package:
+    name: "{{ kibana_package }}"
+    state: present
+
+- name: Copy kibana configuration.
+  template:
+    src: "configs/{{ kibana_conf }}"
+    dest: "/etc/kibana/kibana.yml"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart kibana
+
+- name: start and enable service
+  service:
+    name: kibana
+    state: started
+    enabled: yes
+

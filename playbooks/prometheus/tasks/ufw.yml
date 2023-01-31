@@ -1,0 +1,21 @@
+# Install and start ufw
+- name: Install ufw
+  apt:
+    pkg:
+      - ufw
+    state: present
+
+- name: ufw rule ssh
+  ufw:
+    rule: allow
+    proto: tcp
+    port: '22'
+
+- name: ufw rule 
+  ufw:
+    state: enabled
+    rule: allow
+    proto: tcp
+    port: '"{{ ufw_port }}"'
+    src: any
+

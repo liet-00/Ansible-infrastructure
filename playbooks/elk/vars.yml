@@ -1,0 +1,19 @@
+java_packages: openjdk-11-jdk
+
+elasticsearch_version: '8.x'
+elasticsearch_package: elasticsearch
+elasticsearch_conf: elasticsearch.yml
+
+kibana_version: '8.x'
+kibana_package: kibana
+kibana_conf: kibana.yml
+
+logstash_package: logstash
+input_config: 02-beats-input.conf
+output_config: 30-elasticsearch-output.conf
+logstash_conf: logstash.yml
+
+beat_package: filebeat
+filebeat_conf: filebeat.yml
+filebeat_module: system
+

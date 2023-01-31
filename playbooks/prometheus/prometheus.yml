@@ -1,0 +1,21 @@
+---
+- name: Setup prometheus server
+  hosts: prometheus
+  become: True
+  vars_files: vars_prometheus.yml
+    
+  tasks:
+  - import_tasks: tasks/install_promt.yml
+  - import_tasks: tasks/install_node.yml
+
+  handlers:
+  - name: restart prometheus
+    systemd:
+      daemon_reload: true
+      name: prometheus
+      state: restarted
+  - name: restart node_exporter
+    systemd:
+      daemon_reload: true
+      name: node_exporter
+      state: restarted

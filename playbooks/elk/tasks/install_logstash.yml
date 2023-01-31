@@ -1,0 +1,32 @@
+# LOGSTASH INSTALL
+- name: Install logstash
+  package:
+    name: "{{ logstash_package }}"
+    state: present
+
+- name: Copy input,output config
+  copy:
+    src: "configs/logstash/{{ item }}"
+    dest: "/etc/logstash/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - "{{ input_config }}"
+    - "{{ output_config }}"
+
+- name: Copy logstash configuration.
+  copy:
+    src: "configs/logstash/{{ logstash_conf }}"
+    dest: "/etc/logstash/logstash.yml"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart logstash
+
+- name: start and enable service
+  service:
+    name: logstash
+    state: started
+    enabled: yes
+

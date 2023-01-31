@@ -1,0 +1,7 @@
+#!/bin/sh
+# custom/run
+# run script for "custom" daemon:
+exec 2>&1
+echo "*** Starting service custom..."
+exec ./custom.sh
+# that's all, folks! 

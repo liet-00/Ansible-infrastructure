@@ -1,0 +1,56 @@
+---
+# Setup nginx proxy
+- name: Nginx proxy
+  hosts: nginxP
+  become: True
+  vars_files: vars_nginxP.yml
+
+
+  tasks:
+    - name: install and enable nginx
+      import_tasks: tasks/nginx.yml
+    - name: install and enable ufw
+      import_tasks: tasks/ufw.yml
+
+        # Creating selfsigned Cert
+    - name: install python cryptography lib 
+      apt:
+        name: python3-cryptography
+        state: present
+    - name: Create private key
+      openssl_privatekey:
+        path: "{{ privateKP }}"
+
+    - name: Create self-signed certificate without CSR info
+      community.crypto.x509_certificate:
+        path: "{{ certKP }}"
+        privatekey_path: "{{ privateKP }}"
+        provider: selfsigned
+    
+    - name: config nginx
+      import_tasks: tasks/nginxConf.yml
+    
+        # Setup exporters
+    - name: setup node exporter
+      import_tasks: tasks/install_node.yml
+    - name: setup nginx exporter
+      import_tasks: tasks/install_nginx_exporter.yml
+
+  handlers:
+  - name: restart_nginx
+    service:
+      name: nginx
+      state: restarted
+
+  - name: restart node_exporter
+    systemd:
+      daemon_reload: true
+      name: node_exporter
+      state: restarted
+
+  - name: restart nginx_exporter
+    systemd:
+      daemon_reload: true
+      name: nginx_exporter
+      state: restarted
+

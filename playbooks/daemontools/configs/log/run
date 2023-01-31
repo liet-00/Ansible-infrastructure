@@ -1,0 +1,5 @@
+#!/bin/sh
+# custom/log/run
+# run script for logging "custom" daemon
+exec multilog t ./main
+# that's all, folks!

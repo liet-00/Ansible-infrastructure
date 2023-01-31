@@ -1,0 +1,26 @@
+  # connect to proxy vars
+ufw_port: 80
+ufw_srcIP: 192.168.60.3
+rootdir: /var/www/nginx.test
+virthost: nginx_test.conf
+
+  # node_exporter vars
+go_arch: amd64
+node_exporter_version: 1.5.0
+node_exporter_checksum: af999fd31ab54ed3a34b9f0b10c28e9acee9ef5ac5a5d5edfdde85437db7acbb
+_node_exporter_binary_install_dir: "/usr/local/bin"
+node_exporter_binary_local_dir: ''
+node_exporter_service_file: templates/node_exporter.service.j2
+
+  # nginx exporter vars
+go_arch: amd64
+nginx_exporter_version: 0.11.0
+_nginx_exporter_binary_install_dir: "/usr/local/bin"
+nginx_exporter_binary_local_dir: ''
+nginx_exporter_service_file: templates/nginx_exporter.service.j2
+
+  #ufw vars
+node_port: 9100
+nginxE_port: 9113
+prometheus_ip: 192.168.60.4
+host_ip: 192.168.60.2

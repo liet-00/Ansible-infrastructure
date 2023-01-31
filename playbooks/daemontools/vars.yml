@@ -1,0 +1,8 @@
+errno_conf: conf-cc
+unit_file: daemontools.service
+service_dir: /var/svc.d
+script_file: custom.sh
+script: custom
+script_log: "{{ script }}/log"
+multilog: log/run
+run_file: run

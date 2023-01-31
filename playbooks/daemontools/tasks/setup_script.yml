@@ -1,0 +1,46 @@
+---
+- name: create script directory
+  file:
+    path: "{{ service_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 2755
+    state: directory
+  with_items:
+    - "{{ script }}"
+    - "{{ script_log }}"
+
+- name: copy script to script directory
+  copy:
+    src: "configs/{{ script_file }}"
+    dest: "{{ service_dir }}/{{ script }}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: copy script run file
+  copy:
+    src: "configs/{{ run_file }}"
+    dest: "{{ service_dir }}/{{ script }}/run"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: setup multilog
+  copy:
+    src: "configs/{{ multilog }}"
+    dest: "{{ service_dir }}/{{ script_log }}"
+    mode: 0755
+    owner: root
+    group: root
+
+- name: activate service
+  file:
+    src: "{{ service_dir }}/{{ script }}"
+    dest: "/service/{{ script }}"
+    owner: root
+    group: root
+    state: link
+  notify:
+    - restart daemontools
+

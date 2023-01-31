@@ -1,0 +1,30 @@
+# Setup NGinx
+- name: rootdir or cachedir for nginx
+  file:
+    path: "{{ rootdir }}"
+    owner: www-data
+    group: www-data
+    mode: '0755'
+    state: directory
+
+- name: rm default site
+  file:
+    path: /etc/nginx/conf.d/default.conf
+    state: absent
+
+- name: copy config file
+  copy:
+    src: "configs/{{ virthost }}"
+    dest: "/etc/nginx/conf.d/{{ virthost }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: restart_nginx
+  service:
+    name: nginx
+    state: restarted
+
+
+
+
