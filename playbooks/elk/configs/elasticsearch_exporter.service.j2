@@ -1,0 +1,14 @@
+[Unit]
+Description=Nginx Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=elasticsearch_exporter
+Group=elasticsearch_exporter
+Type=simple
+ExecStart={{ elasticsearch_exporter_binary_install_dir }}/elasticsearch_exporter \
+	   --es.uri="http://localhost:9200"
+
+[Install]
+WantedBy=multi-user.target

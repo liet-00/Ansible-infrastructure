@@ -1,3 +1,4 @@
+---
 java_packages: openjdk-11-jdk
 
 elasticsearch_version: '8.x'
@@ -17,3 +18,15 @@ beat_package: filebeat
 filebeat_conf: filebeat.yml
 filebeat_module: system
 
+go_arch: amd64
+elasticsearch_exporter_version: 1.5.0
+elasticsearch_exporter_binary_install_dir: "/usr/local/bin"
+elasticsearch_exporter_binary_local_dir: ''
+elasticsearch_exporter_service_file: configs/elasticsearch_exporter.service.j2
+
+ufw_ports:
+  - 9200
+  - 9300
+  - 5000
+  - 5044
+  - 5601

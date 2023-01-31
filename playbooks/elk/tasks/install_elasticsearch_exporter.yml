@@ -19,9 +19,8 @@
     - name: Download elasticsearch_exporter binary to local folder
       become: false
       get_url:
-        url: "https://github.com/prometheus-community/elasticsearch_exporter/releases/download/v{{ elasticsearch_version }}/elasticsearch_exporter-{{ node_exporter_version }}.linux-{{ go_arch }}.tar.gz"
-        dest: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}.tar.gz"
-        checksum: "sha256:{{ elasticsearch_exporter_checksum }}"
+        url: "https://github.com/prometheus-community/elasticsearch_exporter/releases/download/v{{ elasticsearch_exporter_version }}/elasticsearch_exporter-{{ elasticsearch_exporter_version }}.linux-{{ go_arch }}.tar.gz"
+        dest: "/tmp/elasticsearch_exporter-{{ elasticsearch_exporter_version }}.linux-{{ go_arch }}.tar.gz"
         mode: '0644'
       register: _download_binary
       until: _download_binary is succeeded
@@ -33,16 +32,16 @@
     - name: Unpack elasticsearch_exporter binary
       become: false
       unarchive:
-        src: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}.tar.gz"
+        src: "/tmp/elasticsearch_exporter-{{ elasticsearch_exporter_version }}.linux-{{ go_arch }}.tar.gz"
         dest: "/tmp"
-        creates: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}/elasticsearch_exporter"
+        creates: "/tmp/elasticsearch_exporter-{{ elasticsearch_exporter_version }}.linux-{{ go_arch }}/elasticsearch_exporter"
       delegate_to: localhost
       check_mode: false
 
     - name: Propagate elasticsearch_exporter binaries
       copy:
-        src: "/tmp/elasticsearch_exporter-{{ elasticsearch_version }}.linux-{{ go_arch }}/node_exporter"
-        dest: "{{ _elasticsearch_exporter_binary_install_dir }}/elasticsearch_version"
+        src: "/tmp/elasticsearch_exporter-{{ elasticsearch_exporter_version }}.linux-{{ go_arch }}/elasticsearch_exporter"
+        dest: "{{ elasticsearch_exporter_binary_install_dir }}/elasticsearch_exporter"
         mode: 0755
         owner: root
         group: root
@@ -52,8 +51,8 @@
 
 - name: propagate locally distributed elasticsearch_exporter binary
   copy:
-    src: "{{ elasticsearch_exporter_binary_local_dir }}/elasticsearch_version"
-    dest: "{{ _elasticsearch_exporter_binary_install_dir }}/elasticsearch_version"
+    src: "{{ elasticsearch_exporter_binary_local_dir }}/elasticsearch_exporter"
+    dest: "{{ elasticsearch_exporter_binary_install_dir }}/elasticsearch_exporter"
     mode: 0755
     owner: root
     group: root
@@ -75,5 +74,6 @@
   service:
     name: elasticsearch_exporter.service
     enabled: yes
+    state: started
 
 

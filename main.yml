@@ -1,7 +1,17 @@
 ---
 - hosts: all
   become: true
+  gather_facts: false
   tasks:
+  - name: Setup infrastructure
+    become: false
+    command:
+      cmd: vagrant up
+    delegate_to: localhost
+
+  - debug:
+      msg: "VMs UP"
+
   - name: cp hosts file to boxes
     copy:
       src: hosts
@@ -12,4 +22,5 @@
 
 - import_playbook: playbooks/nginx/nginx.yml
 - import_playbook: playbooks/nginx/nginxP.yml
+- import_playbook: playbooks/elk/elk.yml
 - import_playbook: playbooks/prometheus/prometheus.yml

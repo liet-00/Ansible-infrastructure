@@ -1,5 +1,6 @@
 #! /bin/bash
-printf "Memory\t\tDisk\t\tCPU\n"
+echo "Memory		Disk		CPU"
+
 free=$(free -mt | grep Total | awk '{print $4}')
 
 while [ "$free" -ge 100  ]; do

@@ -14,8 +14,8 @@
   - 'deb-src https://nginx.org/packages/debian/ bullseye nginx' 
 
 - name: apt_update
-  shell:
-    cmd: sudo apt update
+  apt:
+    update_cache: yes
   ignore_errors: yes
 
 - name: install gnupg

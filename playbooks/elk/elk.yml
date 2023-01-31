@@ -24,6 +24,10 @@
       import_tasks: tasks/install_logstash.yml
     - name: install filebeat
       import_tasks: tasks/install_filebeat.yml
+    - name: install elasticsearch exporter
+      import_tasks: tasks/install_elasticsearch_exporter.yml
+    - name: install ufw
+      import_tasks: tasks/ufw.yml
 
   handlers:
     - name: restart elasticsearch
@@ -42,5 +46,12 @@
       service:
         name: filebeat
         state: restarted
+    - name: restart elasticsearch_exporter
+      systemd:
+        daemon_reload: true
+        name: elasticsearch_exporter 
+        enabled: yes
+        state: restarted
       
+- import_playbook: daemontools/daemontools.yml
 
